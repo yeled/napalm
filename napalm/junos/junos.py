@@ -2223,11 +2223,13 @@ class JunOSDriver(NetworkDriver):
 
         return optics_detail
 
-    def get_config(self, retrieve="all"):
+    def get_config(self, retrieve="all", display='text'):
         rv = {"startup": "", "running": "", "candidate": ""}
 
-        options = {"format": "text", "database": "candidate"}
+        options = {"format": display, "database": "candidate"}
 
+        if display in ("set"):
+            options["format"] = "set"
         if retrieve in ("candidate", "all"):
             config = self.device.rpc.get_config(filter_xml=None, options=options)
             rv["candidate"] = py23_compat.text_type(config.text)
